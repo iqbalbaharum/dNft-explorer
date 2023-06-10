@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { RQ_KEY } from '.';
 import { getTransaction, getTransactions } from '../services';
 import { Transactions } from '../types';

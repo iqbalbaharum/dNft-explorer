@@ -27,6 +27,17 @@ export function isUrl(value: string) {
 	return urlPattern.test(value);
 }
 
+export function isJson(item: any) {
+	let value = typeof item !== 'string' ? JSON.stringify(item) : item;
+	try {
+		value = JSON.parse(value);
+	} catch (e) {
+		return false;
+	}
+
+	return typeof value === 'object' && value !== null;
+}
+
 export function formatTimestamp(timestamp: number) {
 	const date = new Date(timestamp);
 

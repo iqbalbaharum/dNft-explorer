@@ -15,7 +15,7 @@ export const TransactionDetails = () => {
 	const { useGetTransaction } = useRepositories();
 	const { data: tx, refetch, isLoading } = useGetTransaction(String(hash));
 
-	const labels = [
+	const COMMON_LABELS = [
 		'hash',
 		'method',
 		'status',
@@ -24,12 +24,17 @@ export const TransactionDetails = () => {
 		'public_key',
 		'host_id',
 		'from_peer_id',
-		'token_id',
-		'token_key',
 		'nonce',
-		'host_id',
-		'data_key',
 	];
+
+	const METHOD_METADATA = ['token_id', 'token_key', 'data_key'];
+	const METHOD_CONTRACT = ['token_key', 'meta_contract_id'];
+
+	const labels: { [key: string]: string[] } = {
+		metadata: COMMON_LABELS.concat(METHOD_METADATA),
+		contract: COMMON_LABELS.concat(METHOD_CONTRACT),
+		cron: COMMON_LABELS,
+	};
 
 	useEffect(() => {
 		const hashExists = hash?.length;
@@ -44,7 +49,10 @@ export const TransactionDetails = () => {
 						<div className="text-sm text-gray-600">Transaction Details</div>
 
 						{!isLoading && (
-							<TxDetailTable label={labels} data={tx as Transactions} />
+							<TxDetailTable
+								label={labels[(tx as Transactions).method]}
+								data={tx as Transactions}
+							/>
 						)}
 					</div>
 				</div>

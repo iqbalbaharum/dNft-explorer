@@ -1,17 +1,27 @@
-import { capitalizeWords, formatTimestamp } from '../../utils/utils.functions';
+import {
+	capitalizeWords,
+	formatTimestamp,
+	isJson,
+	isUrl,
+} from '../../utils/utils.functions';
 import { Badge } from '../Badge';
+import { ExternalURL, PrettyJSON } from '..';
 
 type TxDetail = { label: string[]; data: { [key: string]: any } };
 
 export const TxDetailTable = ({ label, data }: TxDetail) => {
 	const renderValue = (key: string, data: any) => {
 		switch (key) {
+			case 'data':
+				if (isJson(data)) return <PrettyJSON data={JSON.parse(data)} />;
+				if (isUrl(data)) return <ExternalURL url={data} />;
+				return data;
 			case 'timestamp':
 				return formatTimestamp(data);
 			case 'method':
 				return (
 					<Badge
-						text={data}
+						text={capitalizeWords(data)}
 						className="bg-[#F8F9FA] text-black text-xs font-medium px-4 py-1 rounded shadow-sm w-20 overflow-hidden text-ellipsis"
 					/>
 				);
