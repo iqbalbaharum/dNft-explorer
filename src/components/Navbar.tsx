@@ -5,6 +5,7 @@ import '../assets/rc-dropdown.css';
 import Menu, { MenuItem } from 'rc-menu';
 import { NavLink } from 'react-router-dom';
 import { ArrowIcon } from '../assets/icons';
+import { useBoundStore } from '../store';
 
 const CustomNavLink = ({
 	children,
@@ -15,6 +16,8 @@ const CustomNavLink = ({
 	to: string;
 	className: string;
 }) => {
+	const resetAllSlices = useBoundStore((state) => state.resetAllSlices);
+
 	return (
 		<NavLink
 			to={to}
@@ -24,6 +27,7 @@ const CustomNavLink = ({
 					color: isActive ? '#0784c3' : '',
 				};
 			}}
+			onClick={() => resetAllSlices()}
 		>
 			{children}
 		</NavLink>

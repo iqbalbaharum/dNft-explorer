@@ -6,7 +6,7 @@ import { useBoundStore } from '../store';
 import { useRepositories } from '../repositories';
 
 export const SearchBar = () => {
-	const { setHash, resetHistory } = useBoundStore((state) => state);
+	const { setHash, resetAllSlices } = useBoundStore((state) => state);
 	const { useGetMetadatasWithHistory } = useRepositories();
 	const { refetch } = useGetMetadatasWithHistory();
 
@@ -32,7 +32,7 @@ export const SearchBar = () => {
 
 		let hash = { ...args, dataKey };
 
-		resetHistory();
+		resetAllSlices();
 		setHash(hash);
 		refetch();
 
