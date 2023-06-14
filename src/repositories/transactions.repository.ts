@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { RQ_KEY } from '.';
 import { getTransaction, getTransactions } from '../services';
 import { Transactions } from '../types';
@@ -34,10 +34,19 @@ const getTx = async (hash: string) => {
 };
 
 const useGetTransaction = (hash: string) => {
+	const queryClient = useQueryClient();
+
 	return useQuery({
 		queryKey: [RQ_KEY.GET_TRANSACTION, hash],
 		queryFn: () => getTx(hash),
 		enabled: Boolean(hash),
+		initialData: () => {
+			let txs = queryClient.getQueryData([
+				RQ_KEY.GET_TRANSACTIONS,
+			]) as Transactions[];
+
+			return txs?.find((tx) => tx.hash === hash);
+		},
 	});
 };
 
