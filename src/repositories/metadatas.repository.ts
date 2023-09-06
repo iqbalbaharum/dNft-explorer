@@ -1,25 +1,27 @@
-import { useQuery } from '@tanstack/react-query';
-import { RQ_KEY } from '.';
-import { getMetadataWithHistory, getMetadatas } from '../services';
-import { Metadatas } from '../types';
-import { useBoundStore } from '../store';
+import { useQuery } from '@tanstack/react-query'
+import { RQ_KEY } from '.'
+import { getMetadataWithHistory, getMetadatas } from '../services'
+import { Metadata } from '../types'
+import { useBoundStore } from '../store'
 
-const getMetadatasWithHistory = async (dataKey: string) => {
+const getMetadatasWithHistory = async (dataKey: string, version = '1') => {
   try {
-    const res = await getMetadatas(dataKey);
-    let metadatas = res?.result?.metadatas as Metadatas[];
+    const res = await getMetadatas(dataKey, version)
+    let metadatas = res?.result?.metadatas as Metadata[]
 
-    const promises = metadatas.map(async (metadata: Metadatas) => {
+    const promises = metadatas.map(async (metadata: Metadata) => {
       let response = await getMetadataWithHistory({
-        dataKey: metadata.data_key,
-        publicKey: metadata.public_key,
+        data_key: metadata.data_key,
+        meta_contract_id: metadata.meta_contract_id,
+        public_key: metadata.public_key,
         alias: metadata.alias,
-      });
+        version: '',
+      })
 
-      const { result } = response;
+      const { result } = response
 
-      const haveNoAlias = metadata.alias.length <= 0;
-      if (haveNoAlias) metadata.alias = ``;
+      const haveNoAlias = metadata.alias.length <= 0
+      if (haveNoAlias) metadata.alias = ``
 
       let updatedMetadata = {
         ...metadata,
@@ -28,27 +30,27 @@ const getMetadatasWithHistory = async (dataKey: string) => {
           metadata: JSON.parse(result.metadata),
           history: result.history.map((el: any) => JSON.parse(el)),
         },
-      };
+      }
 
-      return updatedMetadata;
-    });
+      return updatedMetadata
+    })
 
-    metadatas = await Promise.all(promises);
+    metadatas = await Promise.all(promises)
 
-    return metadatas;
+    return metadatas
   } catch (e) {
-    return [];
+    return []
   }
-};
+}
 
 const useGetMetadatasWithHistory = () => {
-  const { dataKey } = useBoundStore((state) => state.hash);
+  const { dataKey } = useBoundStore(state => state.hash)
 
   return useQuery({
     queryKey: [RQ_KEY.GET_METADATAS_WITH_HISTORY, dataKey],
     queryFn: () => getMetadatasWithHistory(dataKey),
     enabled: Boolean(dataKey),
-  });
-};
+  })
+}
 
-export const MetadataRepository = { useGetMetadatasWithHistory };
+export const MetadataRepository = { useGetMetadatasWithHistory }
