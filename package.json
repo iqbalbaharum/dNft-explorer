@@ -2,7 +2,7 @@
   "name": "explorer",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://dnft-explorer-63de76.spheron.app/0xefb872050656d1f3efeb4643df71b716bbf812d5",
+  "homepage": "./",
   "dependencies": {
     "@fluencelabs/fluence": "^0.28.0",
     "@fluencelabs/fluence-network-environment": "^1.0.14",
