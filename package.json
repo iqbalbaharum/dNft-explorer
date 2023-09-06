@@ -2,7 +2,6 @@
   "name": "explorer",
   "version": "0.1.0",
   "private": true,
-  "homepage": ".",
   "dependencies": {
     "@fluencelabs/fluence": "^0.28.0",
     "@fluencelabs/fluence-network-environment": "^1.0.14",
